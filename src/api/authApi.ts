@@ -10,6 +10,7 @@ export const signUp = (data: {
   api.post<AuthResponse>("/auth/signup", data);
 
 export const signIn = (data: {
+  
   email: string;
   password: string;
 }) =>

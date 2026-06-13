@@ -1,4 +1,5 @@
 export interface AuthResponse {
+  id: number;
   token: string;
   email: string;
   name: string;
@@ -28,6 +29,17 @@ export interface FoodItem {
   category: Category;
 }
 
+export interface CreateFoodRequest {
+  name: string;
+  description?: string;
+  price: number;
+  imageUrl?: string;
+  status: "AVAILABLE" | "OUT_OF_STOCK";
+  category: {
+    id: number;
+  };
+}
+
 export interface CartItem {
   id: number;
   foodItem: FoodItem;
@@ -36,5 +48,25 @@ export interface CartItem {
 
 export interface Cart {
   id: number;
-  items: CartItem[];
+  cartItems: CartItem[];
+}
+
+export interface OrderItem {
+  id: number;
+  quantity: number;
+  foodItem: FoodItem;
+}
+
+export interface Payment {
+  id: number;
+  amount: number;
+  status: string;
+}
+
+export interface Order {
+  id: number;
+  orderDate: string;
+  status: string;
+  orderItems: OrderItem[];
+  payment?: Payment;
 }
