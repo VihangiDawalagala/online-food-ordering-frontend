@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Search, SlidersHorizontal } from "lucide-react";
+
 import { getAllFoods } from "../api/foodApi";
 import type { FoodItem } from "../types";
 import FoodCard from "../components/FoodCard";
@@ -13,8 +15,8 @@ const fallbackFoods: FoodItem[] = [
     status: "AVAILABLE",
     category: {
       id: 1,
-      name: "Pizza"
-    }
+      name: "Pizza",
+    },
   },
   {
     id: 2,
@@ -25,8 +27,8 @@ const fallbackFoods: FoodItem[] = [
     status: "AVAILABLE",
     category: {
       id: 2,
-      name: "Burger"
-    }
+      name: "Burger",
+    },
   },
   {
     id: 3,
@@ -37,9 +39,9 @@ const fallbackFoods: FoodItem[] = [
     status: "AVAILABLE",
     category: {
       id: 3,
-      name: "Rice"
-    }
-  }
+      name: "Rice",
+    },
+  },
 ];
 
 const getFoodsFromResponse = (data: unknown): FoodItem[] => {
@@ -47,10 +49,7 @@ const getFoodsFromResponse = (data: unknown): FoodItem[] => {
     return data;
   }
 
-  if (
-    data &&
-    typeof data === "object"
-  ) {
+  if (data && typeof data === "object") {
     const responseData = data as {
       data?: unknown;
       content?: unknown;
@@ -81,83 +80,189 @@ const getFoodsFromResponse = (data: unknown): FoodItem[] => {
 function Home() {
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("ALL");
 
   useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        const response = await getAllFoods();
+        const loadedFoods = getFoodsFromResponse(response.data);
+
+        setFoods(
+          loadedFoods.length > 0
+            ? loadedFoods
+            : fallbackFoods
+        );
+      } catch (error) {
+        console.error("Failed to load foods:", error);
+        setFoods(fallbackFoods);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchFoods();
   }, []);
 
-  const fetchFoods = async () => {
-    try {
-      const response = await getAllFoods();
-      const loadedFoods = getFoodsFromResponse(response.data);
+  const categories = useMemo(
+    () => [
+      "ALL",
+      ...Array.from(
+        new Set(
+          foods
+            .map((food) => food.category?.name)
+            .filter(Boolean)
+        )
+      ),
+    ],
+    [foods]
+  );
 
-      console.log("Foods:", loadedFoods);
+  const availableCount = foods.filter(
+    (food) => food.status === "AVAILABLE"
+  ).length;
 
-      setFoods(loadedFoods.length > 0 ? loadedFoods : fallbackFoods);
-    } catch (error) {
-      console.error("Failed to load foods:", error);
-      setFoods(fallbackFoods);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const filteredFoods = foods.filter((food) => {
+    const matchesSearch = food.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesCategory =
+      category === "ALL" ||
+      food.category?.name === category;
+
+    return matchesSearch && matchesCategory;
+  });
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-
-      {/* Hero Section */}
+    <div className="min-h-screen bg-gray-100">
       <section
-        className="h-[550px] bg-cover bg-center flex items-center justify-center relative"
+        className="relative min-h-[520px] bg-cover bg-center"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836')",
         }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/65 to-gray-950/20"></div>
 
-        <div className="relative text-center text-white z-10">
-          <h1 className="text-6xl md:text-7xl font-bold text-yellow-400 drop-shadow-lg">
-            GourmetHub
-          </h1>
+        <div className="relative mx-auto grid min-h-[520px] max-w-7xl items-center px-6 py-16">
+          <div className="max-w-2xl text-white">
+            <span className="mb-4 inline-flex rounded-md bg-amber-400 px-3 py-1 text-sm font-black text-gray-950">
+              Fresh meals, fast checkout
+            </span>
 
-          <p className="text-xl md:text-2xl mt-4">
-            Premium Dining Experience Delivered
-          </p>
+            <h1 className="text-5xl font-black leading-tight md:text-7xl">
+              GourmetHub
+            </h1>
 
-          <button className="mt-8 bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3 rounded-xl transition">
-            Explore Menu
-          </button>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-gray-100 md:text-xl">
+              Browse chef-prepared dishes, build your cart, and
+              track every order from one clean food ordering system.
+            </p>
+
+            <div className="mt-8 grid max-w-lg grid-cols-3 overflow-hidden rounded-lg border border-white/20 bg-white/10 backdrop-blur">
+              <div className="p-4">
+                <p className="text-2xl font-black">
+                  {foods.length}
+                </p>
+                <p className="text-xs font-semibold text-gray-200">
+                  Menu Items
+                </p>
+              </div>
+
+              <div className="border-x border-white/20 p-4">
+                <p className="text-2xl font-black">
+                  {categories.length - 1}
+                </p>
+                <p className="text-xs font-semibold text-gray-200">
+                  Categories
+                </p>
+              </div>
+
+              <div className="p-4">
+                <p className="text-2xl font-black">
+                  {availableCount}
+                </p>
+                <p className="text-xs font-semibold text-gray-200">
+                  Available
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Popular Foods */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <main className="mx-auto max-w-7xl px-6 py-12">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-sm font-black uppercase text-amber-600">
+              Explore Menu
+            </p>
+            <h2 className="mt-2 text-4xl font-black text-gray-950">
+              Popular Foods
+            </h2>
+            <p className="mt-2 text-gray-600">
+              Filter by category or search by dish name.
+            </p>
+          </div>
 
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold text-gray-900">
-            Popular Foods
-          </h2>
-
-          <p className="text-gray-500 mt-3 text-lg">
-            Freshly prepared meals from our top chefs
+          <p className="rounded-md bg-white px-4 py-3 text-sm font-bold text-gray-600 shadow-sm">
+            Showing {filteredFoods.length} of {foods.length}
           </p>
         </div>
 
+        <div className="mb-10 grid gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:grid-cols-[1fr_240px]">
+          <label className="relative block">
+            <Search
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              value={search}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
+              placeholder="Search foods"
+              className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+            />
+          </label>
+
+          <label className="relative block">
+            <SlidersHorizontal
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <select
+              value={category}
+              onChange={(event) =>
+                setCategory(event.target.value)
+              }
+              className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+            >
+              {categories.map((item) => (
+                <option key={item} value={item}>
+                  {item === "ALL" ? "All Categories" : item}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
         {loading ? (
-          <div className="text-center py-20">
-            <p className="text-xl font-semibold">
+          <div className="rounded-lg border border-gray-200 bg-white py-16 text-center shadow-sm">
+            <p className="text-lg font-semibold text-gray-700">
               Loading delicious food...
             </p>
           </div>
-        ) : foods.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-xl text-gray-500">
+        ) : filteredFoods.length === 0 ? (
+          <div className="rounded-lg border border-gray-200 bg-white py-16 text-center shadow-sm">
+            <p className="text-lg font-semibold text-gray-500">
               No foods available.
             </p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {foods.map((food) => (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredFoods.map((food) => (
               <FoodCard
                 key={food.id}
                 food={food}
@@ -165,7 +270,7 @@ function Home() {
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Lock, Mail } from "lucide-react";
 
 import { signIn } from "../api/authApi";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -46,56 +47,86 @@ function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-orange-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
-        <h1 className="text-3xl font-bold text-center text-orange-600">
-          Sign In
-        </h1>
-
-        <p className="text-center text-gray-500 mt-2 mb-6">
-          Welcome back to Food Ordering System
-        </p>
-
-        {error && (
-          <p className="bg-red-100 text-red-600 text-sm p-3 rounded-lg mb-4">
-            {error}
+    <div className="min-h-screen bg-gray-100 px-4 py-12">
+      <div className="mx-auto grid min-h-[calc(100vh-8rem)] max-w-6xl items-center gap-8 lg:grid-cols-[1fr_460px]">
+        <div className="hidden lg:block">
+          <p className="text-sm font-black uppercase text-amber-600">
+            Welcome back
           </p>
-        )}
+          <h1 className="mt-3 max-w-xl text-5xl font-black leading-tight text-gray-950">
+            Manage orders and meals from one refined dashboard.
+          </h1>
+          <p className="mt-5 max-w-lg text-lg leading-8 text-gray-600">
+            Sign in to continue browsing, placing orders, or managing
+            menu operations with your assigned role.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
-          />
+        <div className="w-full rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+          <h2 className="text-3xl font-black text-gray-950">
+            Sign In
+          </h2>
 
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
-          />
+          <p className="mt-2 text-gray-500">
+            Access your GourmetHub account.
+          </p>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 disabled:opacity-50"
-          >
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
+          {error && (
+            <p className="mt-6 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-700">
+              {error}
+            </p>
+          )}
 
-        <p className="text-center text-sm mt-5">
-          Don&apos;t have an account?{" "}
-          <Link to="/signup" className="text-orange-600 font-semibold">
-            Sign Up
-          </Link>
-        </p>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <label className="relative block">
+              <Mail
+                size={18}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={handleChange}
+                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+              />
+            </label>
+
+            <label className="relative block">
+              <Lock
+                size={18}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={form.password}
+                onChange={handleChange}
+                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="h-12 w-full rounded-md bg-gray-950 font-bold text-white hover:bg-gray-800 disabled:opacity-50"
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Do not have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-bold text-amber-700 hover:text-amber-800"
+            >
+              Sign Up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -18,6 +18,13 @@ export const createFood = (
   return api.post("/foods", food);
 };
 
+export const updateFood = (
+  id: number,
+  food: CreateFoodRequest
+) => {
+  return api.put(`/foods/${id}`, food);
+};
+
 export const deleteFood = (id: number) => {
   return api.delete(`/foods/${id}`);
 };

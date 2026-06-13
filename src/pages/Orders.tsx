@@ -1,26 +1,40 @@
 import { useEffect, useState } from "react";
+
 import { getOrders } from "../api/orderApi";
+import type { Order } from "../types";
+import { useAuth } from "../context/useAuth";
 
 function Orders() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const { user } = useAuth();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const loadOrders = async () => {
+      if (!user) {
+        return;
+      }
+
+      try {
+        const response = await getOrders(user.id);
+        setOrders(response.data as Order[]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadOrders();
-  }, []);
+  }, [user]);
 
-  const loadOrders = async () => {
-    try {
-      const user = JSON.parse(
-        localStorage.getItem("user") || "{}"
-      );
-
-      const response = await getOrders(user.id);
-
-      setOrders(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-8">
+        <p className="text-center font-semibold">Loading orders...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-8">
@@ -30,7 +44,7 @@ function Orders() {
         </h1>
 
         {orders.length === 0 ? (
-          <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
+          <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
             <h2 className="text-2xl font-semibold text-gray-600">
               No Orders Found
             </h2>
@@ -39,14 +53,14 @@ function Orders() {
           orders.map((order) => (
             <div
               key={order.id}
-              className="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-200 hover:shadow-xl transition"
+              className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
             >
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex flex-col gap-3 md:flex-row md:justify-between md:items-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">
                   Order #{order.id}
                 </h2>
 
-                <span className="px-4 py-2 rounded-full bg-yellow-100 text-yellow-800 font-semibold">
+                <span className="w-fit rounded-md bg-amber-100 px-4 py-2 font-semibold text-amber-800">
                   {order.status}
                 </span>
               </div>
@@ -56,10 +70,10 @@ function Orders() {
               </p>
 
               <div className="space-y-3">
-                {order.orderItems?.map((item: any) => (
+                {order.orderItems?.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-50 border border-gray-200 rounded-xl p-4"
+                    className="rounded-lg border border-gray-200 bg-gray-50 p-4"
                   >
                     <h3 className="font-bold text-lg text-gray-800">
                       {item.foodItem.name}
@@ -76,14 +90,14 @@ function Orders() {
                 ))}
               </div>
 
-              <div className="mt-5 flex justify-between items-center">
+              <div className="mt-5 flex flex-col gap-3 md:flex-row md:justify-between md:items-center">
                 <span
-                  className={`px-4 py-2 rounded-full font-semibold ${
+                  className={`w-fit rounded-md px-4 py-2 font-semibold ${
                     order.payment?.status === "COMPLETED"
                       ? "bg-green-100 text-green-700"
                       : order.payment?.status === "FAILED"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-blue-100 text-blue-700"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-blue-100 text-blue-700"
                   }`}
                 >
                   Payment: {order.payment?.status || "N/A"}

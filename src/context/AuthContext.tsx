@@ -1,27 +1,23 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useState } from "react";
 import type { ReactNode } from "react";
 
 import type { AuthResponse } from "../types";
+import { AuthContext } from "./authContextCore";
 
-interface AuthContextType {
-  user: AuthResponse | null;
-  token: string | null;
+const getSavedUser = () => {
+  const savedUser = localStorage.getItem("user");
 
-  login: (data: AuthResponse) => void;
-  logout: () => void;
+  if (!savedUser) {
+    return null;
+  }
 
-  isAuthenticated: () => boolean;
-  isAdmin: () => boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+  try {
+    return JSON.parse(savedUser) as AuthResponse;
+  } catch {
+    localStorage.removeItem("user");
+    return null;
+  }
+};
 
 export const AuthProvider = ({
   children,
@@ -29,23 +25,12 @@ export const AuthProvider = ({
   children: ReactNode;
 }) => {
   const [user, setUser] =
-    useState<AuthResponse | null>(null);
+    useState<AuthResponse | null>(getSavedUser);
 
   const [token, setToken] =
-    useState<string | null>(null);
-
-  useEffect(() => {
-    const savedToken =
-      localStorage.getItem("token");
-
-    const savedUser =
-      localStorage.getItem("user");
-
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+    useState<string | null>(() =>
+      localStorage.getItem("token")
+    );
 
   const login = (data: AuthResponse) => {
     localStorage.setItem("token", data.token);
@@ -86,16 +71,4 @@ export const AuthProvider = ({
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error(
-      "useAuth must be used inside AuthProvider"
-    );
-  }
-
-  return context;
 };

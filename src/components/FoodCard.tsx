@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { ShoppingCart, Star } from "lucide-react";
+
 import type { FoodItem } from "../types";
 import { addToCart } from "../api/cartApi";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 interface Props {
   food: FoodItem;
@@ -49,12 +51,7 @@ function FoodCard({ food }: Props) {
     }
 
     try {
-      await addToCart(
-        user.id,
-        food.id,
-        1
-      );
-
+      await addToCart(user.id, food.id, 1);
       alert(`${food.name} added to cart`);
     } catch (error) {
       console.error(error);
@@ -63,59 +60,77 @@ function FoodCard({ food }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-
-      <div className="relative">
+    <article className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         <img
           src={image}
           alt={food.name}
-          className="w-full h-60 object-cover"
-          onError={(e) => {
-            e.currentTarget.src = fallbackImage;
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+          onError={(event) => {
+            event.currentTarget.src = fallbackImage;
           }}
         />
 
-        <span className="absolute top-4 left-4 bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold">
-          {food.category?.name ?? "Food"}
-        </span>
+        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
+          <span className="rounded-md bg-white/95 px-3 py-1 text-xs font-bold text-gray-800 shadow-sm">
+            {food.category?.name ?? "Food"}
+          </span>
 
-        <span className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-bold shadow">
-          ⭐ 4.8
-        </span>
+          <span className="inline-flex items-center gap-1 rounded-md bg-gray-950/90 px-2.5 py-1 text-xs font-bold text-amber-300">
+            <Star size={13} fill="currentColor" />
+            4.8
+          </span>
+        </div>
       </div>
 
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-gray-900">
-          {food.name}
-        </h3>
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-xl font-bold text-gray-950">
+            {food.name}
+          </h3>
 
-        <p className="text-gray-500 mt-2 min-h-[50px]">
-          {food.description || "Delicious food prepared by our chefs."}
+          <span
+            className={`rounded-md px-2 py-1 text-xs font-bold ${
+              food.status === "AVAILABLE"
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-red-50 text-red-700"
+            }`}
+          >
+            {food.status === "AVAILABLE"
+              ? "Available"
+              : "Out"}
+          </span>
+        </div>
+
+        <p className="mt-3 min-h-[48px] text-sm leading-6 text-gray-600">
+          {food.description ||
+            "Delicious food prepared by our chefs."}
         </p>
 
-        <div className="flex justify-between items-center mt-6">
-          <span className="text-3xl font-bold text-yellow-600">
+        <div className="mt-5 flex items-center justify-between">
+          <span className="text-2xl font-black text-gray-950">
             Rs. {food.price.toLocaleString()}
           </span>
         </div>
 
-        <div className="flex gap-3 mt-5">
-          <button
-            onClick={handleAddToCart}
-            className="flex-1 bg-yellow-500 text-black px-4 py-3 rounded-xl font-semibold hover:bg-yellow-600"
-          >
-            Add To Cart
-          </button>
-
+        <div className="mt-5 grid grid-cols-[1fr_44px] gap-3">
           <Link
             to={`/food/${food.id}`}
-            className="flex-1 text-center bg-black text-white px-4 py-3 rounded-xl font-semibold hover:bg-gray-800"
+            className="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-3 text-sm font-bold text-gray-800 hover:bg-gray-50"
           >
             View Details
           </Link>
+
+          <button
+            onClick={handleAddToCart}
+            className="grid h-11 w-11 place-items-center rounded-md bg-amber-500 text-gray-950 hover:bg-amber-400"
+            aria-label={`Add ${food.name} to cart`}
+          >
+            <ShoppingCart size={19} />
+          </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 

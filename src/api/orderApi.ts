@@ -9,3 +9,16 @@ export const placeOrder = (userId: number) => {
 export const getOrders = (userId: number) => {
   return api.get(`/orders/${userId}`);
 };
+
+export const getAllOrders = () => {
+  return api.get("/orders");
+};
+
+export const updateOrderStatus = (
+  orderId: number,
+  status: string
+) => {
+  return api.put(`/orders/${orderId}/status`, {
+    status,
+  });
+};

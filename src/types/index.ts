@@ -70,3 +70,10 @@ export interface Order {
   orderItems: OrderItem[];
   payment?: Payment;
 }
+
+export interface PaymentRequest {
+  orderId: number;
+  amount: number;
+  cardNumber: string;
+  cardHolderName: string;
+}

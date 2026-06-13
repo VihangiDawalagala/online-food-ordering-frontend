@@ -14,3 +14,14 @@ export const addToCart = (
     foodId,
     quantity,
   });
+
+export const updateCartItem = (
+  cartItemId: number,
+  quantity: number
+) =>
+  api.put<Cart>(`/cart/update/${cartItemId}`, {
+    quantity,
+  });
+
+export const removeCartItem = (cartItemId: number) =>
+  api.delete(`/cart/remove/${cartItemId}`);
