@@ -13,39 +13,35 @@ const adminCards = [
     description: "Create, update and remove menu items.",
     to: "/manage-foods",
     icon: Boxes,
-    accent: "bg-amber-50 text-amber-700",
   },
   {
     title: "Categories",
     description: "Organize food items into clear sections.",
     to: "/manage-categories",
     icon: Tags,
-    accent: "bg-blue-50 text-blue-700",
   },
   {
     title: "Orders",
     description: "Track orders and update fulfilment status.",
     to: "/manage-orders",
     icon: ClipboardList,
-    accent: "bg-emerald-50 text-emerald-700",
   },
   {
     title: "Customers",
     description: "View users registered in the system.",
     to: "/manage-users",
     icon: Users,
-    accent: "bg-violet-50 text-violet-700",
   },
 ];
 
 function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="page-shell">
+      <div className="page-container">
+        <div className="page-header mb-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="inline-flex items-center gap-2 text-sm font-black uppercase text-amber-600">
+              <p className="section-kicker">
                 <LayoutDashboard size={16} />
                 Admin Workspace
               </p>
@@ -62,7 +58,7 @@ function AdminDashboard() {
 
             <Link
               to="/"
-              className="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50"
+              className="btn-muted"
             >
               Back Home
             </Link>
@@ -77,11 +73,9 @@ function AdminDashboard() {
               <Link
                 key={card.title}
                 to={card.to}
-                className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="surface p-6 transition hover:-translate-y-1 hover:shadow-lg"
               >
-                <span
-                  className={`grid h-12 w-12 place-items-center rounded-md ${card.accent}`}
-                >
+                <span className="grid h-12 w-12 place-items-center rounded-md bg-amber-50 text-amber-700">
                   <Icon size={22} />
                 </span>
 
@@ -93,7 +87,7 @@ function AdminDashboard() {
                   {card.description}
                 </p>
 
-                <span className="mt-5 inline-flex text-sm font-bold text-gray-950">
+                <span className="mt-5 inline-flex text-sm font-bold text-amber-700">
                   Open
                 </span>
               </Link>

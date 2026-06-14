@@ -16,8 +16,8 @@ import { useAuth } from "../context/useAuth";
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
     isActive
-      ? "bg-amber-100 text-amber-900"
-      : "text-gray-600 hover:bg-gray-100 hover:text-gray-950"
+      ? "bg-amber-50 text-amber-800"
+      : "text-gray-600 hover:bg-slate-100 hover:text-gray-950"
   }`;
 
 function Navbar() {
@@ -80,7 +80,7 @@ function Navbar() {
   );
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur">
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-16 flex items-center justify-between">
           <Link
@@ -117,7 +117,7 @@ function Navbar() {
 
                 <Link
                   to="/signup"
-                  className="inline-flex items-center gap-2 rounded-md bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800"
+                  className="btn-primary min-h-0 px-4 py-2"
                 >
                   <UserPlus size={17} />
                   Sign Up
@@ -125,13 +125,13 @@ function Navbar() {
               </>
             ) : (
               <>
-                <span className="rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-700">
+                <span className="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-gray-700">
                   {user.name}
                 </span>
 
                 <button
                   onClick={handleLogout}
-                  className="inline-flex items-center gap-2 rounded-md bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100"
+                  className="btn-danger min-h-0 px-4 py-2"
                 >
                   <LogOut size={17} />
                   Logout
@@ -168,7 +168,7 @@ function Navbar() {
                   <Link
                     to="/signup"
                     onClick={closeMenu}
-                    className="inline-flex items-center justify-center gap-2 rounded-md bg-gray-950 px-4 py-3 text-sm font-semibold text-white"
+                    className="btn-primary"
                   >
                     <UserPlus size={17} />
                     Sign Up
@@ -177,7 +177,7 @@ function Navbar() {
               ) : (
                 <button
                   onClick={handleLogout}
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"
+                  className="btn-danger"
                 >
                   <LogOut size={17} />
                   Logout

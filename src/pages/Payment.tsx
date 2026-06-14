@@ -65,7 +65,7 @@ function Payment() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 px-4 py-12">
+    <div className="page-shell">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_460px]">
         <div className="rounded-lg border border-gray-200 bg-gray-950 p-8 text-white shadow-sm">
           <p className="text-sm font-black uppercase text-amber-400">
@@ -93,7 +93,7 @@ function Payment() {
             </div>
 
             <div className="rounded-lg border border-white/10 bg-white/5 p-5">
-              <Banknote className="text-emerald-400" />
+              <Banknote className="text-amber-400" />
               <p className="mt-4 text-sm text-gray-300">
                 Amount
               </p>
@@ -104,7 +104,7 @@ function Payment() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="surface p-8">
           <h2 className="text-3xl font-black text-gray-950">
             Payment Details
           </h2>
@@ -126,7 +126,7 @@ function Payment() {
                 placeholder="Order ID"
                 value={form.orderId}
                 onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                className="field field-icon"
               />
             </label>
 
@@ -140,7 +140,7 @@ function Payment() {
                 placeholder="Amount"
                 value={form.amount}
                 onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                className="field field-icon"
               />
             </label>
 
@@ -154,7 +154,7 @@ function Payment() {
                 placeholder="Card Number"
                 value={form.cardNumber}
                 onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                className="field field-icon"
               />
             </label>
 
@@ -168,14 +168,14 @@ function Payment() {
                 placeholder="Card Holder Name"
                 value={form.cardHolderName}
                 onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                className="field field-icon"
               />
             </label>
 
             <button
               type="submit"
               disabled={loading}
-              className="h-12 w-full rounded-md bg-emerald-600 font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
+              className="btn-primary w-full disabled:opacity-50"
             >
               {loading ? "Processing..." : "Pay Now"}
             </button>

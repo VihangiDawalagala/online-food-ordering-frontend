@@ -81,7 +81,7 @@ function FoodDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="page-shell">
         <p className="text-center font-semibold">Loading food...</p>
       </div>
     );
@@ -89,7 +89,7 @@ function FoodDetails() {
 
   if (error || !food) {
     return (
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="page-shell">
         <p className="text-center text-red-600">
           {error || "Food not found"}
         </p>
@@ -98,8 +98,8 @@ function FoodDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div className="page-shell">
+      <div className="surface mx-auto max-w-5xl overflow-hidden">
         <img
           src={getImageUrl(food.imageUrl)}
           alt={food.name}
@@ -110,7 +110,7 @@ function FoodDetails() {
         />
 
         <div className="p-8">
-          <span className="mb-4 inline-block rounded-md bg-amber-100 px-4 py-2 font-semibold text-amber-800">
+          <span className="status-neutral mb-4 inline-block rounded-md px-4 py-2 font-semibold">
             {food.category?.name ?? "Food"}
           </span>
 
@@ -129,7 +129,7 @@ function FoodDetails() {
 
           <button
             onClick={handleAddToCart}
-            className="mt-6 rounded-md bg-amber-500 px-6 py-3 font-bold text-gray-950 hover:bg-amber-400"
+            className="btn-primary mt-6"
           >
             Add To Cart
           </button>

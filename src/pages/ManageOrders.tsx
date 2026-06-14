@@ -17,7 +17,7 @@ const statuses = [
 
 const statusClass = (status: string) => {
   if (status === "DELIVERED") {
-    return "bg-emerald-50 text-emerald-700";
+    return "status-success";
   }
 
   if (status === "CANCELLED") {
@@ -25,10 +25,10 @@ const statusClass = (status: string) => {
   }
 
   if (status === "PREPARING") {
-    return "bg-blue-50 text-blue-700";
+    return "status-neutral";
   }
 
-  return "bg-amber-50 text-amber-700";
+  return "status-neutral";
 };
 
 function ManageOrders() {
@@ -69,8 +69,8 @@ function ManageOrders() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="mx-auto max-w-6xl rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+      <div className="page-shell">
+        <div className="surface mx-auto max-w-6xl p-8">
           <p className="font-semibold text-gray-700">
             Loading orders...
           </p>
@@ -80,10 +80,10 @@ function ManageOrders() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <p className="inline-flex items-center gap-2 text-sm font-black uppercase text-emerald-700">
+    <div className="page-shell">
+      <div className="page-container-narrow">
+        <div className="page-header mb-6">
+          <p className="section-kicker">
             <ClipboardList size={16} />
             Fulfilment
           </p>
@@ -105,7 +105,7 @@ function ManageOrders() {
             orders.map((order) => (
               <article
                 key={order.id}
-                className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+                className="surface p-6"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div>
@@ -132,7 +132,7 @@ function ManageOrders() {
                         event.target.value
                       )
                     }
-                    className="h-11 rounded-md border border-gray-300 px-3 text-sm font-semibold outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                    className="field max-w-[220px] text-sm font-semibold"
                   >
                     {statuses.map((status) => (
                       <option key={status} value={status}>
@@ -146,9 +146,9 @@ function ManageOrders() {
                   {order.orderItems?.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-3 rounded-md border border-gray-200 bg-gray-50 p-4"
+                      className="flex items-center gap-3 rounded-md border border-gray-200 bg-slate-50/80 p-4"
                     >
-                      <span className="grid h-10 w-10 place-items-center rounded-md bg-white text-emerald-700">
+                      <span className="grid h-10 w-10 place-items-center rounded-md bg-white text-amber-700">
                         <PackageCheck size={18} />
                       </span>
                       <div>

@@ -119,8 +119,8 @@ function Cart() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 p-8">
-        <div className="max-w-6xl mx-auto">
+      <div className="page-shell">
+        <div className="page-container-narrow">
           <p className="text-lg font-semibold">Loading cart...</p>
         </div>
       </div>
@@ -128,15 +128,23 @@ function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-black mb-8 flex items-center gap-3 text-gray-950">
-          <ShoppingCart />
-          Shopping Cart
-        </h1>
+    <div className="page-shell">
+      <div className="page-container-narrow">
+        <div className="page-header mb-8">
+          <p className="section-kicker">
+            <ShoppingCart size={16} />
+            Checkout
+          </p>
+          <h1 className="mt-2 text-4xl font-black text-gray-950">
+            Shopping Cart
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Review quantities and continue to secure payment.
+          </p>
+        </div>
 
         {!cart?.cartItems?.length ? (
-          <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+          <div className="surface p-8">
             <p className="text-gray-500 text-lg">
               Your cart is currently empty.
             </p>
@@ -147,7 +155,7 @@ function Cart() {
               {cart.cartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between"
+                  className="surface flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between"
                 >
                   <div>
                     <h2 className="text-xl font-bold">
@@ -167,7 +175,7 @@ function Cart() {
                           item.quantity - 1
                         )
                       }
-                      className="rounded-md bg-gray-100 p-3 hover:bg-gray-200"
+                      className="rounded-md bg-slate-100 p-3 hover:bg-slate-200"
                       aria-label="Decrease quantity"
                     >
                       <Minus size={18} />
@@ -184,7 +192,7 @@ function Cart() {
                           item.quantity + 1
                         )
                       }
-                      className="rounded-md bg-gray-100 p-3 hover:bg-gray-200"
+                      className="rounded-md bg-slate-100 p-3 hover:bg-slate-200"
                       aria-label="Increase quantity"
                     >
                       <Plus size={18} />
@@ -204,14 +212,14 @@ function Cart() {
               ))}
             </div>
 
-            <div className="mt-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="surface mt-8 flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
               <h2 className="text-3xl font-black mb-4 text-gray-950">
                 Total: Rs. {total.toLocaleString()}
               </h2>
 
               <button
                 onClick={handleCheckout}
-                className="rounded-md bg-emerald-600 px-8 py-3 font-bold text-white hover:bg-emerald-700"
+                className="btn-primary"
               >
                 Checkout
               </button>

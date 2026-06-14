@@ -60,8 +60,8 @@ function FoodCard({ food }: Props) {
   };
 
   return (
-    <article className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+    <article className="surface group flex h-full flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lg">
+      <div className="relative aspect-[16/11] overflow-hidden bg-gray-100">
         <img
           src={image}
           alt={food.name}
@@ -83,17 +83,17 @@ function FoodCard({ food }: Props) {
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-4">
-          <h3 className="text-xl font-bold text-gray-950">
+          <h3 className="line-clamp-2 text-xl font-bold leading-7 text-gray-950">
             {food.name}
           </h3>
 
           <span
             className={`rounded-md px-2 py-1 text-xs font-bold ${
               food.status === "AVAILABLE"
-                ? "bg-emerald-50 text-emerald-700"
-                : "bg-red-50 text-red-700"
+                ? "status-success"
+                : "status-danger"
             }`}
           >
             {food.status === "AVAILABLE"
@@ -102,12 +102,12 @@ function FoodCard({ food }: Props) {
           </span>
         </div>
 
-        <p className="mt-3 min-h-[48px] text-sm leading-6 text-gray-600">
+        <p className="mt-3 line-clamp-2 min-h-[48px] text-sm leading-6 text-gray-600">
           {food.description ||
             "Delicious food prepared by our chefs."}
         </p>
 
-        <div className="mt-5 flex items-center justify-between">
+        <div className="mt-auto pt-5">
           <span className="text-2xl font-black text-gray-950">
             Rs. {food.price.toLocaleString()}
           </span>
@@ -116,14 +116,14 @@ function FoodCard({ food }: Props) {
         <div className="mt-5 grid grid-cols-[1fr_44px] gap-3">
           <Link
             to={`/food/${food.id}`}
-            className="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-3 text-sm font-bold text-gray-800 hover:bg-gray-50"
+            className="btn-muted"
           >
             View Details
           </Link>
 
           <button
             onClick={handleAddToCart}
-            className="grid h-11 w-11 place-items-center rounded-md bg-amber-500 text-gray-950 hover:bg-amber-400"
+            className="grid h-11 w-11 place-items-center rounded-md bg-gray-950 text-amber-300 hover:bg-gray-800"
             aria-label={`Add ${food.name} to cart`}
           >
             <ShoppingCart size={19} />

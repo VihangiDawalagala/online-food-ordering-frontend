@@ -64,10 +64,10 @@ function ManageCategories() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <p className="inline-flex items-center gap-2 text-sm font-black uppercase text-blue-700">
+    <div className="page-shell">
+      <div className="page-container-narrow">
+        <div className="page-header mb-6">
+          <p className="section-kicker">
             <Tags size={16} />
             Menu Structure
           </p>
@@ -81,7 +81,7 @@ function ManageCategories() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
-          <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <section className="surface p-6">
             <h2 className="flex items-center gap-2 text-xl font-black text-gray-950">
               <FolderPlus size={20} />
               {editingId ? "Edit Category" : "Add Category"}
@@ -97,7 +97,7 @@ function ManageCategories() {
                   })
                 }
                 placeholder="Category name"
-                className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="field"
               />
 
               <textarea
@@ -109,14 +109,14 @@ function ManageCategories() {
                   })
                 }
                 placeholder="Description"
-                className="min-h-28 w-full resize-none rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="field"
               />
             </div>
 
             <div className="mt-5 flex gap-3">
               <button
                 onClick={handleSubmit}
-                className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-3 font-bold text-white hover:bg-blue-700"
+                className="btn-primary"
               >
                 <FolderPlus size={18} />
                 {editingId ? "Update" : "Add"}
@@ -125,7 +125,7 @@ function ManageCategories() {
               {editingId && (
                 <button
                   onClick={resetForm}
-                  className="rounded-md border border-gray-300 px-5 py-3 font-bold text-gray-700 hover:bg-gray-50"
+                  className="btn-muted"
                 >
                   Cancel
                 </button>
@@ -133,7 +133,7 @@ function ManageCategories() {
             </div>
           </section>
 
-          <section className="rounded-lg border border-gray-200 bg-white shadow-sm">
+          <section className="surface overflow-hidden">
             <div className="border-b border-gray-200 p-5">
               <h2 className="text-xl font-black text-gray-950">
                 Categories
@@ -173,7 +173,7 @@ function ManageCategories() {
                               category.description || "",
                           });
                         }}
-                        className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-100"
+                        className="btn-muted min-h-0 px-3 py-2"
                       >
                         <Edit3 size={16} />
                         Edit
@@ -183,7 +183,7 @@ function ManageCategories() {
                         onClick={() =>
                           deleteCategory(category.id).then(loadCategories)
                         }
-                        className="inline-flex items-center gap-2 rounded-md bg-red-50 px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-100"
+                        className="btn-danger min-h-0 px-3 py-2"
                       >
                         <Trash2 size={16} />
                         Delete

@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Lock, Mail, User } from "lucide-react";
+import {
+  ClipboardList,
+  Lock,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+  User,
+} from "lucide-react";
 
 import { signUp } from "../api/authApi";
 import { useAuth } from "../context/useAuth";
@@ -56,28 +63,73 @@ function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 px-4 py-12">
-      <div className="mx-auto grid min-h-[calc(100vh-8rem)] max-w-6xl items-center gap-8 lg:grid-cols-[1fr_460px]">
-        <div className="hidden lg:block">
-          <p className="text-sm font-black uppercase text-amber-600">
+    <div className="page-shell">
+      <div className="mx-auto grid min-h-[calc(100vh-8rem)] max-w-6xl items-center gap-8 lg:grid-cols-[1fr_480px]">
+        <section className="hidden lg:block">
+          <p className="section-kicker">
+            <Sparkles size={16} />
             Create access
           </p>
           <h1 className="mt-3 max-w-xl text-5xl font-black leading-tight text-gray-950">
-            Join the food ordering system in seconds.
+            Create an account built for customers and operations teams.
           </h1>
           <p className="mt-5 max-w-lg text-lg leading-8 text-gray-600">
             Customers can order food, while admins can manage foods,
             categories, orders, and users.
           </p>
-        </div>
 
-        <div className="w-full rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-          <h2 className="text-3xl font-black text-gray-950">
-            Create Account
-          </h2>
+          <div className="mt-8 grid max-w-xl gap-4">
+            <div className="surface flex items-start gap-4 p-5">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-amber-50 text-amber-700">
+                <User size={20} />
+              </span>
+              <div>
+                <h2 className="font-black text-gray-950">
+                  Customer workspace
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-gray-600">
+                  Browse the menu, add meals to cart, checkout, and
+                  review order history from one clean account.
+                </p>
+              </div>
+            </div>
 
-          <p className="mt-2 text-gray-500">
-            Start using GourmetHub today.
+            <div className="surface flex items-start gap-4 p-5">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-amber-50 text-amber-700">
+                <ShieldCheck size={20} />
+              </span>
+              <div>
+                <h2 className="font-black text-gray-950">
+                  Admin workspace
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-gray-600">
+                  Maintain menu items, categories, order statuses, and
+                  registered users with role-based access.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="surface w-full p-8">
+          <div className="mb-7 flex items-start justify-between gap-4">
+            <div>
+              <p className="section-kicker">
+                <ClipboardList size={16} />
+                New account
+              </p>
+              <h2 className="mt-2 text-3xl font-black text-gray-950">
+                Create Account
+              </h2>
+            </div>
+            <span className="rounded-md bg-amber-50 px-3 py-2 text-xs font-black uppercase text-amber-700">
+              GourmetHub
+            </span>
+          </div>
+
+          <p className="text-sm leading-6 text-gray-500">
+            Enter your details and choose the correct access level for
+            how you will use the ordering system.
           </p>
 
           {error && (
@@ -86,66 +138,89 @@ function SignUp() {
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            <label className="relative block">
-              <User
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                name="name"
-                type="text"
-                placeholder="Full Name"
-                value={form.name}
-                onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
-              />
+          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            <label className="block">
+              <span className="mb-2 block text-sm font-bold text-gray-700">
+                Full name
+              </span>
+              <span className="relative block">
+                <User
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="Your full name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="field field-icon"
+                />
+              </span>
             </label>
 
-            <label className="relative block">
-              <Mail
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                name="email"
-                type="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
-              />
+            <label className="block">
+              <span className="mb-2 block text-sm font-bold text-gray-700">
+                Email address
+              </span>
+              <span className="relative block">
+                <Mail
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="field field-icon"
+                />
+              </span>
             </label>
 
-            <label className="relative block">
-              <Lock
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-                className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
-              />
+            <label className="block">
+              <span className="mb-2 block text-sm font-bold text-gray-700">
+                Password
+              </span>
+              <span className="relative block">
+                <Lock
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Minimum 6 characters"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="field field-icon"
+                />
+              </span>
             </label>
 
-            <select
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
-            >
-              <option value="CUSTOMER">Customer</option>
-              <option value="ADMIN">Admin</option>
-            </select>
+            <label className="block">
+              <span className="mb-2 block text-sm font-bold text-gray-700">
+                Account type
+              </span>
+              <select
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                className="field"
+              >
+                <option value="CUSTOMER">Customer</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+              <span className="mt-2 block text-xs font-semibold text-gray-500">
+                Choose Admin only for restaurant management access.
+              </span>
+            </label>
 
             <button
               type="submit"
               disabled={loading}
-              className="h-12 w-full rounded-md bg-gray-950 font-bold text-white hover:bg-gray-800 disabled:opacity-50"
+              className="btn-primary w-full disabled:opacity-50"
             >
               {loading ? "Creating account..." : "Sign Up"}
             </button>

@@ -135,7 +135,7 @@ function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-50">
       <section
         className="relative min-h-[520px] bg-cover bg-center"
         style={{
@@ -143,9 +143,9 @@ function Home() {
             "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836')",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/65 to-gray-950/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/70 to-gray-950/25"></div>
 
-        <div className="relative mx-auto grid min-h-[520px] max-w-7xl items-center px-6 py-16">
+        <div className="relative mx-auto grid min-h-[520px] max-w-[1500px] items-center px-6 py-16">
           <div className="max-w-2xl text-white">
             <span className="mb-4 inline-flex rounded-md bg-amber-400 px-3 py-1 text-sm font-black text-gray-950">
               Fresh meals, fast checkout
@@ -192,10 +192,10 @@ function Home() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-6 py-12">
+      <main className="mx-auto max-w-[1500px] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-black uppercase text-amber-600">
+            <p className="section-kicker">
               Explore Menu
             </p>
             <h2 className="mt-2 text-4xl font-black text-gray-950">
@@ -206,12 +206,12 @@ function Home() {
             </p>
           </div>
 
-          <p className="rounded-md bg-white px-4 py-3 text-sm font-bold text-gray-600 shadow-sm">
+          <p className="surface px-4 py-3 text-sm font-bold text-gray-600">
             Showing {filteredFoods.length} of {foods.length}
           </p>
         </div>
 
-        <div className="mb-10 grid gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:grid-cols-[1fr_240px]">
+        <div className="surface mb-10 grid gap-4 p-4 md:grid-cols-[1fr_240px]">
           <label className="relative block">
             <Search
               size={18}
@@ -223,7 +223,7 @@ function Home() {
                 setSearch(event.target.value)
               }
               placeholder="Search foods"
-              className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+              className="field field-icon text-sm"
             />
           </label>
 
@@ -237,7 +237,7 @@ function Home() {
               onChange={(event) =>
                 setCategory(event.target.value)
               }
-              className="h-12 w-full rounded-md border border-gray-300 pl-11 pr-4 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+              className="field field-icon text-sm"
             >
               {categories.map((item) => (
                 <option key={item} value={item}>
@@ -249,19 +249,19 @@ function Home() {
         </div>
 
         {loading ? (
-          <div className="rounded-lg border border-gray-200 bg-white py-16 text-center shadow-sm">
+          <div className="surface py-16 text-center">
             <p className="text-lg font-semibold text-gray-700">
               Loading delicious food...
             </p>
           </div>
         ) : filteredFoods.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-white py-16 text-center shadow-sm">
+          <div className="surface py-16 text-center">
             <p className="text-lg font-semibold text-gray-500">
               No foods available.
             </p>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {filteredFoods.map((food) => (
               <FoodCard
                 key={food.id}

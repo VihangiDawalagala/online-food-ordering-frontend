@@ -37,8 +37,8 @@ const initialFoodState: FoodFormState = {
 
 const statusBadge = (status: FoodItem["status"]) =>
   status === "AVAILABLE"
-    ? "bg-emerald-50 text-emerald-700"
-    : "bg-red-50 text-red-700";
+    ? "status-success"
+    : "status-danger";
 
 function ManageFoods() {
   const [foods, setFoods] = useState<FoodItem[]>([]);
@@ -142,10 +142,10 @@ function ManageFoods() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <p className="inline-flex items-center gap-2 text-sm font-black uppercase text-amber-700">
+    <div className="page-shell">
+      <div className="page-container">
+        <div className="page-header mb-6">
+          <p className="section-kicker">
             <Utensils size={16} />
             Menu Operations
           </p>
@@ -159,7 +159,7 @@ function ManageFoods() {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
-          <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <section className="surface p-6">
             <h2 className="flex items-center gap-2 text-xl font-black text-gray-950">
               <PackagePlus size={20} />
               {editingId ? "Edit Food" : "Add Food"}
@@ -167,7 +167,7 @@ function ManageFoods() {
 
             <div className="mt-5 space-y-4">
               <input
-                className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                className="field"
                 placeholder="Food Name"
                 value={food.name}
                 onChange={(event) =>
@@ -180,7 +180,7 @@ function ManageFoods() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <input
-                  className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                  className="field"
                   placeholder="Price"
                   type="number"
                   value={food.price}
@@ -193,7 +193,7 @@ function ManageFoods() {
                 />
 
                 <select
-                  className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                  className="field"
                   value={food.status}
                   onChange={(event) =>
                     setFood({
@@ -210,7 +210,7 @@ function ManageFoods() {
               </div>
 
               <select
-                className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                className="field"
                 value={food.category.id}
                 onChange={(event) =>
                   setFood({
@@ -236,7 +236,7 @@ function ManageFoods() {
               </select>
 
               <input
-                className="h-12 w-full rounded-md border border-gray-300 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                className="field"
                 placeholder="Image URL"
                 value={food.imageUrl}
                 onChange={(event) =>
@@ -248,7 +248,7 @@ function ManageFoods() {
               />
 
               <textarea
-                className="min-h-28 w-full resize-none rounded-md border border-gray-300 px-4 py-3 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                className="field"
                 placeholder="Description"
                 value={food.description}
                 onChange={(event) =>
@@ -263,7 +263,7 @@ function ManageFoods() {
             <div className="mt-6 flex gap-3">
               <button
                 onClick={handleSubmit}
-                className="inline-flex items-center gap-2 rounded-md bg-amber-500 px-5 py-3 font-bold text-gray-950 hover:bg-amber-400"
+                className="btn-primary"
               >
                 <PackagePlus size={18} />
                 {editingId ? "Update" : "Add"}
@@ -272,7 +272,7 @@ function ManageFoods() {
               {editingId && (
                 <button
                   onClick={resetForm}
-                  className="rounded-md border border-gray-300 px-5 py-3 font-bold text-gray-700 hover:bg-gray-50"
+                  className="btn-muted"
                 >
                   Cancel
                 </button>
@@ -280,7 +280,7 @@ function ManageFoods() {
             </div>
           </section>
 
-          <section className="rounded-lg border border-gray-200 bg-white shadow-sm">
+          <section className="surface overflow-hidden">
             <div className="border-b border-gray-200 p-5">
               <h2 className="text-xl font-black text-gray-950">
                 Menu Items
@@ -297,7 +297,7 @@ function ManageFoods() {
                 foods.map((foodItem) => (
                   <article
                     key={foodItem.id}
-                    className="rounded-lg border border-gray-200 bg-gray-50 p-5"
+                    className="rounded-lg border border-gray-200 bg-slate-50/80 p-5"
                   >
                     <div className="flex gap-4">
                       <span className="grid h-14 w-14 shrink-0 place-items-center rounded-md bg-white text-amber-700">
@@ -339,7 +339,7 @@ function ManageFoods() {
                         onClick={() =>
                           handleEdit(foodItem)
                         }
-                        className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-100"
+                        className="btn-muted min-h-0 px-3 py-2"
                       >
                         <Edit3 size={16} />
                         Edit
@@ -349,7 +349,7 @@ function ManageFoods() {
                         onClick={() =>
                           handleDelete(foodItem.id)
                         }
-                        className="inline-flex items-center gap-2 rounded-md bg-red-50 px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-100"
+                        className="btn-danger min-h-0 px-3 py-2"
                       >
                         <Trash2 size={16} />
                         Delete

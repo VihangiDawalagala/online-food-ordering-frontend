@@ -25,8 +25,8 @@ function ManageUsers() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="mx-auto max-w-6xl rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+      <div className="page-shell">
+        <div className="surface mx-auto max-w-6xl p-8">
           <p className="font-semibold text-gray-700">
             Loading customers...
           </p>
@@ -40,10 +40,10 @@ function ManageUsers() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <p className="inline-flex items-center gap-2 text-sm font-black uppercase text-violet-700">
+    <div className="page-shell">
+      <div className="page-container-narrow">
+        <div className="page-header mb-6">
+          <p className="section-kicker">
             <Users size={16} />
             People
           </p>
@@ -56,8 +56,8 @@ function ManageUsers() {
         </div>
 
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-            <UserRound className="text-violet-700" />
+          <div className="surface p-5">
+            <UserRound className="text-amber-700" />
             <p className="mt-3 text-3xl font-black text-gray-950">
               {users.length}
             </p>
@@ -66,7 +66,7 @@ function ManageUsers() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+          <div className="surface p-5">
             <ShieldCheck className="text-amber-700" />
             <p className="mt-3 text-3xl font-black text-gray-950">
               {adminCount}
@@ -76,8 +76,8 @@ function ManageUsers() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-            <Users className="text-emerald-700" />
+          <div className="surface p-5">
+            <Users className="text-amber-700" />
             <p className="mt-3 text-3xl font-black text-gray-950">
               {users.length - adminCount}
             </p>
@@ -87,7 +87,7 @@ function ManageUsers() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <div className="surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[680px] text-left">
               <thead className="border-b border-gray-200 bg-gray-50 text-sm text-gray-600">
@@ -116,7 +116,7 @@ function ManageUsers() {
                     >
                       <td className="p-4">
                         <span className="inline-flex items-center gap-3 font-bold text-gray-950">
-                          <span className="grid h-9 w-9 place-items-center rounded-md bg-violet-50 text-violet-700">
+                          <span className="grid h-9 w-9 place-items-center rounded-md bg-amber-50 text-amber-700">
                             <UserRound size={17} />
                           </span>
                           {user.name}
@@ -132,8 +132,8 @@ function ManageUsers() {
                         <span
                           className={`rounded-md px-3 py-1 text-sm font-bold ${
                             user.role === "ADMIN"
-                              ? "bg-amber-50 text-amber-700"
-                              : "bg-emerald-50 text-emerald-700"
+                              ? "status-neutral"
+                              : "status-success"
                           }`}
                         >
                           {user.role}

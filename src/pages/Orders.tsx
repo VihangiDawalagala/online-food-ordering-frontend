@@ -30,21 +30,27 @@ function Orders() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="page-shell">
         <p className="text-center font-semibold">Loading orders...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-5xl font-bold text-center text-gray-800 mb-10">
-          My Orders
-        </h1>
+    <div className="page-shell">
+      <div className="page-container-narrow">
+        <div className="page-header mb-8">
+          <p className="section-kicker">Order History</p>
+          <h1 className="mt-2 text-4xl font-black text-gray-950">
+            My Orders
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Track previous orders, payment status, and item details.
+          </p>
+        </div>
 
         {orders.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
+          <div className="surface p-8 text-center">
             <h2 className="text-2xl font-semibold text-gray-600">
               No Orders Found
             </h2>
@@ -53,14 +59,14 @@ function Orders() {
           orders.map((order) => (
             <div
               key={order.id}
-              className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+              className="surface mb-6 p-6"
             >
               <div className="flex flex-col gap-3 md:flex-row md:justify-between md:items-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">
                   Order #{order.id}
                 </h2>
 
-                <span className="w-fit rounded-md bg-amber-100 px-4 py-2 font-semibold text-amber-800">
+                <span className="status-neutral w-fit rounded-md px-4 py-2 font-semibold">
                   {order.status}
                 </span>
               </div>
@@ -73,7 +79,7 @@ function Orders() {
                 {order.orderItems?.map((item) => (
                   <div
                     key={item.id}
-                    className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+                    className="rounded-lg border border-gray-200 bg-slate-50/80 p-4"
                   >
                     <h3 className="font-bold text-lg text-gray-800">
                       {item.foodItem.name}
@@ -83,7 +89,7 @@ function Orders() {
                       Quantity: {item.quantity}
                     </p>
 
-                    <p className="font-semibold text-green-600">
+                    <p className="font-semibold text-amber-700">
                       Rs. {item.foodItem.price.toFixed(2)}
                     </p>
                   </div>
@@ -94,16 +100,16 @@ function Orders() {
                 <span
                   className={`w-fit rounded-md px-4 py-2 font-semibold ${
                     order.payment?.status === "COMPLETED"
-                      ? "bg-green-100 text-green-700"
+                      ? "status-success"
                       : order.payment?.status === "FAILED"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-blue-100 text-blue-700"
+                        ? "status-danger"
+                        : "status-neutral"
                   }`}
                 >
                   Payment: {order.payment?.status || "N/A"}
                 </span>
 
-                <span className="text-2xl font-bold text-green-600">
+                <span className="text-2xl font-bold text-gray-950">
                   Rs. {order.payment?.amount?.toFixed(2) || "0.00"}
                 </span>
               </div>
