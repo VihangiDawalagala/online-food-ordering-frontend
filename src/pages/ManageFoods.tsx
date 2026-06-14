@@ -20,6 +20,16 @@ import type {
   FoodItem,
 } from "../types";
 
+type ApiError = {
+  response?: {
+    status?: number;
+    data?: {
+      message?: string;
+      error?: string;
+    };
+  };
+};
+
 type FoodFormState = Omit<CreateFoodRequest, "price"> & {
   price: string;
 };
@@ -33,6 +43,73 @@ const initialFoodState: FoodFormState = {
   category: {
     id: 1,
   },
+};
+
+const normalizeName = (name: string) =>
+  name.trim().replace(/\s+/g, " ");
+
+const normalizeKey = (name: string) =>
+  normalizeName(name).toLowerCase();
+
+const uniqueCategories = (items: Category[]) => {
+  const seen = new Set<string>();
+
+  return items.filter((category) => {
+    const key = normalizeKey(category.name);
+
+    if (!key || seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+};
+
+const uniqueFoods = (items: FoodItem[]) => {
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    const key = [
+      normalizeKey(item.name),
+      item.category?.id ?? "no-category",
+    ].join("-");
+
+    if (!key || seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+};
+
+const getSavedFoods = () => {
+  try {
+    const savedFoods = localStorage.getItem("localFoods");
+    return savedFoods ? (JSON.parse(savedFoods) as FoodItem[]) : [];
+  } catch {
+    localStorage.removeItem("localFoods");
+    return [];
+  }
+};
+
+const saveLocalFoods = (items: FoodItem[]) => {
+  localStorage.setItem("localFoods", JSON.stringify(items));
+};
+
+const getErrorMessage = (error: unknown) => {
+  const apiError = error as ApiError;
+  const status = apiError.response?.status;
+  const message =
+    apiError.response?.data?.message ||
+    apiError.response?.data?.error;
+
+  if (status === 401 || status === 403) {
+    return "Backend rejected this request because this login token is not admin. Saved locally for the frontend demo.";
+  }
+
+  return message || "Backend failed. Saved locally for the frontend demo.";
 };
 
 const statusBadge = (status: FoodItem["status"]) =>
@@ -49,22 +126,25 @@ function ManageFoods() {
   const loadFoods = async () => {
     try {
       const response = await getAllFoods();
-      setFoods(response.data);
+      setFoods(uniqueFoods([...response.data, ...getSavedFoods()]));
     } catch (error) {
       console.error(error);
+      setFoods(uniqueFoods(getSavedFoods()));
     }
   };
 
   const loadCategories = async () => {
     try {
       const response = await getCategories();
-      setCategories(response.data);
+      const cleanCategories = uniqueCategories(response.data);
 
-      if (response.data[0]) {
+      setCategories(cleanCategories);
+
+      if (cleanCategories[0]) {
         setFood((current) => ({
           ...current,
           category: {
-            id: response.data[0].id,
+            id: cleanCategories[0].id,
           },
         }));
       }
@@ -85,22 +165,49 @@ function ManageFoods() {
   }, []);
 
   const resetForm = () => {
-    setFood(initialFoodState);
+    setFood({
+      ...initialFoodState,
+      category: {
+        id: categories[0]?.id || 1,
+      },
+    });
     setEditingId(null);
   };
 
   const handleSubmit = async () => {
-    if (!food.name || !food.price) {
+    const selectedCategory = categories.find(
+      (category) => category.id === food.category.id
+    );
+    const foodName = normalizeName(food.name);
+    const price = Number(food.price);
+
+    if (!foodName || !food.price) {
       alert("Food name and price are required");
       return;
     }
 
-    try {
-      const payload = {
-        ...food,
-        price: Number(food.price),
-      };
+    if (!Number.isFinite(price) || price <= 0) {
+      alert("Price must be greater than 0");
+      return;
+    }
 
+    if (!selectedCategory) {
+      alert("Please create a category before adding food");
+      return;
+    }
+
+    const payload = {
+      ...food,
+      name: foodName,
+      description: food.description?.trim(),
+      imageUrl: food.imageUrl?.trim(),
+      price,
+      category: {
+        id: selectedCategory.id,
+      },
+    };
+
+    try {
       if (editingId) {
         await updateFood(editingId, payload);
         alert("Food Updated Successfully");
@@ -113,7 +220,31 @@ function ManageFoods() {
       await loadFoods();
     } catch (error) {
       console.error(error);
-      alert("Failed to save food");
+      const localFood: FoodItem = {
+        id: editingId || Date.now(),
+        name: payload.name,
+        description: payload.description,
+        price: payload.price,
+        imageUrl: payload.imageUrl,
+        status: payload.status,
+        category: selectedCategory,
+      };
+      const savedFoods = getSavedFoods();
+      const nextSavedFoods = [
+        ...savedFoods.filter((item) => item.id !== localFood.id),
+        localFood,
+      ];
+
+      saveLocalFoods(nextSavedFoods);
+      setFoods((current) => {
+        const withoutOldItem = current.filter(
+          (item) => item.id !== localFood.id
+        );
+
+        return uniqueFoods([...withoutOldItem, localFood]);
+      });
+      resetForm();
+      alert(getErrorMessage(error));
     }
   };
 
@@ -137,7 +268,15 @@ function ManageFoods() {
       await loadFoods();
     } catch (error) {
       console.error(error);
-      alert("Delete failed");
+      const nextSavedFoods = getSavedFoods().filter(
+        (item) => item.id !== id
+      );
+
+      saveLocalFoods(nextSavedFoods);
+      setFoods((current) =>
+        current.filter((item) => item.id !== id)
+      );
+      alert(getErrorMessage(error));
     }
   };
 

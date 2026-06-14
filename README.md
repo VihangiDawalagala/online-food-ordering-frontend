@@ -1,73 +1,91 @@
-# React + TypeScript + Vite
+# Online Food Ordering Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React TypeScript frontend for the CMJD Comprehensive Master Java Developer coursework: Online Food Ordering System.
 
-Currently, two official plugins are available:
+Repository: [VihangiDawalagala/online-food-ordering-frontend](https://github.com/VihangiDawalagala/online-food-ordering-frontend)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Project Overview
 
-## React Compiler
+This application provides the frontend for an online food ordering system. It supports customer food browsing, authentication, cart management, order placement, payment handling, and admin management features.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- React Router
+- Axios
+- Tailwind CSS
+- Vite
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Sign in and sign up pages
+- JWT authentication handling
+- Role-based navigation
+- Protected customer routes
+- Protected admin routes
+- Food browsing and search
+- Food details page
+- Cart add, update, and remove actions
+- Order placement and order tracking
+- Payment page
+- Admin dashboard
+- Food management
+- Category management
+- Order management
+- User management
+- Responsive user interface
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+  api/          Axios API services
+  components/   Reusable UI components
+  context/      Authentication context
+  pages/        Application pages
+  types/        TypeScript interfaces
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Install dependencies:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Build the project:
+
+```bash
+npm run build
+```
+
+Run lint checks:
+
+```bash
+npm run lint
+```
+
+## Backend API
+
+The frontend is configured to connect to the backend API at:
+
+```text
+http://localhost:8080/api
+```
+
+Make sure the backend server is running before testing authentication, cart, orders, payments, and admin features.
+
+## Coursework
+
+Course: CMJD - Comprehensive Master Java Developer  
+Batch: 112/113  
+Assignment: Front-End Development with React  
+Task: Online Food Ordering System

@@ -9,6 +9,24 @@ import {
 } from "../api/categoryApi";
 import type { Category } from "../types";
 
+const normalizeCategoryName = (name: string) =>
+  name.trim().replace(/\s+/g, " ").toLowerCase();
+
+const uniqueCategories = (items: Category[]) => {
+  const seen = new Set<string>();
+
+  return items.filter((category) => {
+    const key = normalizeCategoryName(category.name);
+
+    if (!key || seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+};
+
 function ManageCategories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState({
@@ -20,7 +38,7 @@ function ManageCategories() {
   const loadCategories = async () => {
     try {
       const response = await getCategories();
-      setCategories(response.data);
+      setCategories(uniqueCategories(response.data));
     } catch (error) {
       console.error(error);
     }
@@ -43,16 +61,35 @@ function ManageCategories() {
   };
 
   const handleSubmit = async () => {
-    if (!form.name) {
+    const categoryName = form.name.trim().replace(/\s+/g, " ");
+    const description = form.description.trim();
+    const duplicateCategory = categories.find(
+      (category) =>
+        normalizeCategoryName(category.name) ===
+          normalizeCategoryName(categoryName) &&
+        category.id !== editingId
+    );
+
+    if (!categoryName) {
       alert("Category name is required");
       return;
     }
 
+    if (duplicateCategory) {
+      alert("This category already exists");
+      return;
+    }
+
     try {
+      const payload = {
+        name: categoryName,
+        description,
+      };
+
       if (editingId) {
-        await updateCategory(editingId, form);
+        await updateCategory(editingId, payload);
       } else {
-        await createCategory(form);
+        await createCategory(payload);
       }
 
       resetForm();

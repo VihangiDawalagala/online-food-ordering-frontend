@@ -23,6 +23,7 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
+  const roleLabel = isAdmin() ? "Admin" : user?.role ? "Customer" : "";
 
   const handleLogout = () => {
     logout();
@@ -129,6 +130,13 @@ function Navbar() {
                   {user.name}
                 </span>
 
+                {roleLabel && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-3 py-2 text-xs font-black uppercase text-amber-800">
+                    <ShieldCheck size={15} />
+                    {roleLabel}
+                  </span>
+                )}
+
                 <button
                   onClick={handleLogout}
                   className="btn-danger min-h-0 px-4 py-2"
@@ -175,13 +183,26 @@ function Navbar() {
                   </Link>
                 </>
               ) : (
-                <button
-                  onClick={handleLogout}
-                  className="btn-danger"
-                >
-                  <LogOut size={17} />
-                  Logout
-                </button>
+                <>
+                  <span className="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-gray-700">
+                    {user.name}
+                  </span>
+
+                  {roleLabel && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-3 py-2 text-xs font-black uppercase text-amber-800">
+                      <ShieldCheck size={15} />
+                      {roleLabel}
+                    </span>
+                  )}
+
+                  <button
+                    onClick={handleLogout}
+                    className="btn-danger"
+                  >
+                    <LogOut size={17} />
+                    Logout
+                  </button>
+                </>
               )}
             </div>
           </div>

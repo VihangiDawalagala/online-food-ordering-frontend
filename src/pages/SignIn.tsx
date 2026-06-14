@@ -42,9 +42,19 @@ function SignIn() {
     try {
       setLoading(true);
       const response = await signIn(form);
+      const savedRoles = JSON.parse(
+        localStorage.getItem("accountRoles") ?? "{}"
+      );
+      const savedRole = savedRoles[form.email.toLowerCase()];
+      const userData = {
+        ...response.data,
+        role: savedRole ?? response.data.role,
+      };
+      const isAdminLogin =
+        userData.role?.toUpperCase().includes("ADMIN") ?? false;
 
-      login(response.data);
-      navigate("/");
+      login(userData);
+      navigate(isAdminLogin ? "/admin" : "/");
     } catch {
       setError("Invalid email or password");
     } finally {

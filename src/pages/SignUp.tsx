@@ -52,9 +52,19 @@ function SignUp() {
     try {
       setLoading(true);
       const response = await signUp(form);
+      const isAdminSignup =
+        form.role.toUpperCase().includes("ADMIN");
+      const savedRoles = JSON.parse(
+        localStorage.getItem("accountRoles") ?? "{}"
+      );
+      savedRoles[form.email.toLowerCase()] = form.role;
+      localStorage.setItem("accountRoles", JSON.stringify(savedRoles));
 
-      login(response.data);
-      navigate("/");
+      login({
+        ...response.data,
+        role: form.role,
+      });
+      navigate(isAdminSignup ? "/admin" : "/");
     } catch {
       setError("Sign up failed. Email may already be registered.");
     } finally {

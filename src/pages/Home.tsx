@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { Search, SlidersHorizontal } from "lucide-react";
 
 import { getAllFoods } from "../api/foodApi";
 import type { FoodItem } from "../types";
 import FoodCard from "../components/FoodCard";
+import { useAuth } from "../context/useAuth";
 
 const fallbackFoods: FoodItem[] = [
   {
@@ -78,6 +80,7 @@ const getFoodsFromResponse = (data: unknown): FoodItem[] => {
 };
 
 function Home() {
+  const { isAdmin } = useAuth();
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -133,6 +136,10 @@ function Home() {
 
     return matchesSearch && matchesCategory;
   });
+
+  if (isAdmin()) {
+    return <Navigate to="/admin" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">

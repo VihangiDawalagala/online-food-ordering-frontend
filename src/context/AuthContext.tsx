@@ -4,6 +4,48 @@ import type { ReactNode } from "react";
 import type { AuthResponse } from "../types";
 import { AuthContext } from "./authContextCore";
 
+const normalizeRoleValue = (value: unknown) => {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.toUpperCase();
+};
+
+const getRoleFromToken = (token?: string) => {
+  if (!token) {
+    return "";
+  }
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const roleValue =
+      payload.role ??
+      payload.roles ??
+      payload.authority ??
+      payload.authorities;
+
+    if (Array.isArray(roleValue)) {
+      return roleValue.map(normalizeRoleValue).join(",");
+    }
+
+    return normalizeRoleValue(roleValue);
+  } catch {
+    return "";
+  }
+};
+
+const normalizeUser = (data: AuthResponse) => {
+  const role =
+    normalizeRoleValue(data.role) ||
+    getRoleFromToken(data.token);
+
+  return {
+    ...data,
+    role,
+  };
+};
+
 const getSavedUser = () => {
   const savedUser = localStorage.getItem("user");
 
@@ -12,7 +54,7 @@ const getSavedUser = () => {
   }
 
   try {
-    return JSON.parse(savedUser) as AuthResponse;
+    return normalizeUser(JSON.parse(savedUser) as AuthResponse);
   } catch {
     localStorage.removeItem("user");
     return null;
@@ -33,15 +75,17 @@ export const AuthProvider = ({
     );
 
   const login = (data: AuthResponse) => {
-    localStorage.setItem("token", data.token);
+    const normalizedUser = normalizeUser(data);
+
+    localStorage.setItem("token", normalizedUser.token);
 
     localStorage.setItem(
       "user",
-      JSON.stringify(data)
+      JSON.stringify(normalizedUser)
     );
 
-    setToken(data.token);
-    setUser(data);
+    setToken(normalizedUser.token);
+    setUser(normalizedUser);
   };
 
   const logout = () => {
@@ -55,7 +99,7 @@ export const AuthProvider = ({
   const isAuthenticated = () => !!token;
 
   const isAdmin = () =>
-    user?.role === "ADMIN";
+    normalizeRoleValue(user?.role).includes("ADMIN");
 
   return (
     <AuthContext.Provider

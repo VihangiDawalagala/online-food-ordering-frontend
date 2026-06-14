@@ -6,14 +6,40 @@ import { getFoodById } from "../api/foodApi";
 import type { FoodItem } from "../types";
 import { useAuth } from "../context/useAuth";
 
-const fallbackImage =
-  "https://images.unsplash.com/photo-1513104890138-7c749659a591";
+const fallbackImages = {
+  default:
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+  pizza:
+    "https://images.unsplash.com/photo-1513104890138-7c749659a591",
+  burger:
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
+  rice:
+    "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+};
 
-const getImageUrl = (imageUrl?: string) => {
-  const value = imageUrl?.trim();
+const getFallbackImage = (food: FoodItem) => {
+  const value = `${food.name} ${food.category?.name ?? ""}`.toLowerCase();
+
+  if (value.includes("burger")) {
+    return fallbackImages.burger;
+  }
+
+  if (value.includes("rice")) {
+    return fallbackImages.rice;
+  }
+
+  if (value.includes("pizza")) {
+    return fallbackImages.pizza;
+  }
+
+  return fallbackImages.default;
+};
+
+const getImageUrl = (food: FoodItem) => {
+  const value = food.imageUrl?.trim();
 
   if (!value) {
-    return fallbackImage;
+    return getFallbackImage(food);
   }
 
   if (
@@ -101,11 +127,11 @@ function FoodDetails() {
     <div className="page-shell">
       <div className="surface mx-auto max-w-5xl overflow-hidden">
         <img
-          src={getImageUrl(food.imageUrl)}
+          src={getImageUrl(food)}
           alt={food.name}
           className="w-full h-96 object-cover"
           onError={(event) => {
-            event.currentTarget.src = fallbackImage;
+            event.currentTarget.src = getFallbackImage(food);
           }}
         />
 

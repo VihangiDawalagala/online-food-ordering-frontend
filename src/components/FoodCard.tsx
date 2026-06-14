@@ -10,14 +10,40 @@ interface Props {
 }
 
 const backendImageUrl = "http://localhost:8080/images";
-const fallbackImage =
-  "https://images.unsplash.com/photo-1513104890138-7c749659a591";
+const fallbackImages = {
+  default:
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+  pizza:
+    "https://images.unsplash.com/photo-1513104890138-7c749659a591",
+  burger:
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
+  rice:
+    "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+};
 
-const getImageUrl = (imageUrl?: string) => {
-  const value = imageUrl?.trim();
+const getFallbackImage = (food: FoodItem) => {
+  const value = `${food.name} ${food.category?.name ?? ""}`.toLowerCase();
+
+  if (value.includes("burger")) {
+    return fallbackImages.burger;
+  }
+
+  if (value.includes("rice")) {
+    return fallbackImages.rice;
+  }
+
+  if (value.includes("pizza")) {
+    return fallbackImages.pizza;
+  }
+
+  return fallbackImages.default;
+};
+
+const getImageUrl = (food: FoodItem) => {
+  const value = food.imageUrl?.trim();
 
   if (!value) {
-    return fallbackImage;
+    return getFallbackImage(food);
   }
 
   if (
@@ -42,7 +68,7 @@ const getImageUrl = (imageUrl?: string) => {
 function FoodCard({ food }: Props) {
   const { user } = useAuth();
 
-  const image = getImageUrl(food.imageUrl);
+  const image = getImageUrl(food);
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -67,7 +93,7 @@ function FoodCard({ food }: Props) {
           alt={food.name}
           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           onError={(event) => {
-            event.currentTarget.src = fallbackImage;
+            event.currentTarget.src = getFallbackImage(food);
           }}
         />
 
